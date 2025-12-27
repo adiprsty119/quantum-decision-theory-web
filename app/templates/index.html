@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QDT Decision Simulator</title>
+
+    <!-- Alpine.js -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- Tailwind CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/output.css') }}"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  </head>
+
+  <body
+    class="bg-gray-400 from-slate-100 to-slate-200 min-h-screen flex items-center justify-center"
+  >
+    <div
+      class="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8"
+      x-data="qdtApp()"
+    >
+      <!-- Header -->
+      <div class="mb-6 text-center">
+        <h1 class="text-3xl font-bold text-slate-800">
+          Quantum Decision Simulator
+        </h1>
+        <p class="text-slate-500 mt-2 text-sm">
+          Simulate human decision-making using Quantum Decision Theory
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <template x-for="field in fields" :key="field.key">
+          <div>
+            <label
+              class="block text-sm font-medium text-slate-700 mb-1"
+              x-text="field.label"
+            ></label>
+            <input
+              type="number"
+              step="0.01"
+              x-model.number="form[field.key]"
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </template>
+      </div>
+
+      <!-- Button -->
+      <button
+        @click="submit"
+        class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
+      >
+        <i class="fa-solid fa-calculator"></i>
+        Evaluate Decision
+      </button>
+
+      <!-- Result -->
+      <div
+        x-show="result"
+        x-transition
+        class="mt-6 p-4 rounded-lg border border-slate-200 bg-slate-50"
+      >
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600 text-sm">Decision Probability</span>
+          <span
+            class="text-lg font-bold text-blue-600"
+            x-text="result.probability"
+          ></span>
+        </div>
+
+        <div class="mt-2 flex justify-between items-center">
+          <span class="text-slate-600 text-sm">Final Decision</span>
+          <span
+            class="px-3 py-1 rounded-full text-sm font-semibold"
+            :class="result.decision === 'BUY'
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700'"
+            x-text="result.decision"
+          ></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- External JS -->
+    <script src="{{ url_for('static', filename='js/qdt.js') }}"></script>
+  </body>
+</html>
